@@ -12,6 +12,16 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" integrity="sha256-2pUeJf+y0ltRPSbKOeJh09ipQFYxUdct5nTY6GAXswA=" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
+  <style>
+    .row {
+    display: flex;
+    }
+
+  .column {
+    flex: 50%;
+    padding: 20px;
+  }
+  </style>
 </head>
 
 <!-- body -->
@@ -112,19 +122,19 @@
       <h3>Our Theme</h3>
 
       <p>
-        The theme of our project is exploring two of the top recorded incidents in 2017.
+        Our project is exploring two of the top recorded incidents in 2017.
         The incidents we chose to focus on are medical incidents and traffic collisions.
-        The two cateogories are compared by their relationships with the neighborhood analysis, unit type, monthly report.
+        The two cateogories are compared by their relationships with the neighborhood analysis, unit type, and monthly report.
       </p>
 
       <div class="row">
-        <span class="column">
+        <div class="column">
           <img src="years.png" alt="Incidents by Year" width="960" height="500">
-        </span>
+        </div>
 
-        <span class="column">
+        <div class="column">
           <img src="types.png" alt="Call Types in 2017" width="960" height="500">
-        </span>
+        </div>
       </div>
     </div>
   </section>
