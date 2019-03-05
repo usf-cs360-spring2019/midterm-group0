@@ -17,12 +17,12 @@
 <body>
 
   <!-- header -->
-  <section class="hero is-primary is-bold">
+  <section class="hero is-dark is-bold">
     <!-- todo: change assignment and name -->
     <div class="hero-body">
       <div class="container">
         <h1 class="title">
-          Data and Processing
+          About the Data
         </h1>
       </div>
     </div>
@@ -42,29 +42,29 @@
           </div>
 
           <div id="main-navbar" class="navbar-menu">
-            <a class="navbar-item" href="enrique.html">
+            <a class="navbar-item" href="neighborhood.html">
               <span class="icon">
                 <i class="fas fa-chart-area"></i>
               </span>
-              <span>Visualization 1</span>
+              <span>Neighborhood</span>
             </a>
           </div>
 
           <div id="main-navbar" class="navbar-menu">
-            <a class="navbar-item" href="cori.html">
+            <a class="navbar-item" href="unit.html">
               <span class="icon">
                 <i class="fas fa-chart-area"></i>
               </span>
-              <span>Visualization 2</span>
+              <span>Unit Type</span>
             </a>
           </div>
 
           <div id="main-navbar" class="navbar-menu">
-            <a class="navbar-item" href="martha.html">
+            <a class="navbar-item" href="month.html">
               <span class="icon">
                 <i class="fas fa-chart-area"></i>
               </span>
-              <span>Visualization 3</span>
+              <span>Month</span>
             </a>
           </div>
 
@@ -99,24 +99,22 @@
     </div>
   </section>
 
-  <!-- todo: add sections as necessary -->
-
-
-  <!-- separator between sections -->
-
-
   <section class="section">
     <div class="container content">
       <h2>
-        About the Data
+        Data and Processing
       </h2>
             <p>
-              <!-- todo: replace with your information -->
-              <strong>San Francisco Fire Department calls for Service</strong>
-              <br/>
-              The data used in these visualizations was taken from <a href="https://data.sfgov.org/Public-Safety/Fire-Department-Calls-for-Service/nuek-vuh3">data.sfgov.org Fire Department Calls for Service</a>
-              The data was filtered through the website and manipulated in <a href="https://www.tableau.com/">Tableau</a>, and later applied in the webiste with <a href="https://d3js.org/">D3</a>.
-              For the different visualizations we used ... <b>FILL IN WITH DATA FILTERED INFO</b>
+              The data used in these visualizations was taken from <a href="https://data.sfgov.org/Public-Safety/Fire-Department-Calls-for-Service/nuek-vuh3">SF Fire Department Calls for Service</a>.
+              The data was first filtered by year to only show data from 2017, the year with the most incidents reported.
+              The data was then filtered to include two specific incident types: medical incidents and traffic collisions.
+              Both categories were compared to analyze their relationship to three different variables.
+              The first variable was the top 30 neighborhoods with the most incidents reported. This narrowed down our data to include 30 categorical rows (each neighborhood) and one categorical column (medical or traffic incidents).
+              The second variable we used was the top 9 unit types dispatched to the scene of the incident. For this our data included 9 categorical rows (each unit type) and again one categorical column (medical or traffic incidents).
+              Each unit type was colored by if it was a non-life-threatening or life-threatening incident which added two more categorical rows to our data.
+              We chose month as our final variable to show the recorded number of incidences per month. Thus, our data used 12 categorical rows (each month) and one categorical column (medical or traffic incidents).
+              After the data processing, our dataset consisted of a total of 2 columns and 53 rows.
+
               <br/>
             </p>
 
