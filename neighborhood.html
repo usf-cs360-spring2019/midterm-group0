@@ -6,11 +6,36 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+
   <title>CS 360/560 Spring 2019</title>
 
   <!-- bulma 0.7.2 and font awesome v5.7.1 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.2/css/bulma.min.css" integrity="sha256-2pUeJf+y0ltRPSbKOeJh09ipQFYxUdct5nTY6GAXswA=" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
+  <style>
+    .bar2 {
+      fill: #499894
+    }
+    .line {
+     fill: none;
+     stroke: none;
+    }
+    .area {
+     fill: lightsteelblue;
+    }
+    .tick line {
+      stroke-width: 0;
+    }
+    .caption {
+      width: 960px;
+      font-size: 12px;
+      margin-left: 20px;
+    }
+  </style>
+
+
 </head>
 
 <!-- body -->
@@ -99,13 +124,88 @@
   </section>
 
 
-  <!-- about section -->
   <section class="section">
-    <div class="container content">
-      <h2 id="prototype">
-        Neighborhood Incidents
-      </h2>
+  <div class="container content">
+    <h2>Neighborhood Incidents</h2>
+    <h4>Neighborhood Medical Incidents</h4>
+    <div id="plot2">
+      <script>
+        d3.csv("NeighborhoodsMD.csv").then(function(data) {
+          console.log(data);
+
+        // set the dimensions and margins of the graph
+        var margin = {top: 20, right: 20, bottom: 50, left: 145},
+          width = 960 - margin.left - margin.right,
+          height = 500 - margin.top - margin.bottom;
+
+        // set the ranges
+        var y = d3.scaleBand()
+                .range([height, 0])
+                .padding(0.1);
+
+        var x = d3.scaleLinear()
+                .range([0, width]);
+
+        // append the svg object to the body of the page
+        // append a 'group' element to 'svg'
+        // moves the 'group' element to the top left margin
+        var svg = d3.select("#plot2").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // format the data
+        data.forEach(function(d) {
+          d.Count = +d.Count;
+        });
+
+        // Scale the range of the data in the domains
+        x.domain([0, d3.max(data, function(d){ return d.Count; })])
+        y.domain(data.map(function(d) { return d.Neighborhood; }));
+
+        // append the rectangles for the bar chart
+        svg.selectAll(".bar2")
+            .data(data)
+            .enter().append("rect")
+            .attr("class", "bar2")
+            .attr("width", function(d) {return x(d.Count); } )
+            .attr("y", function(d) { return y(d.Neighborhood); })
+            .attr("height", y.bandwidth());
+
+        // add x axis label
+        svg.append("text")
+          .attr("x", width / 2 )
+          .attr("y",  height + margin.top + 20)
+          .style("text-anchor", "middle")
+          .text("Number of Records");
+
+          // add y axis label
+          svg.append("text")
+            .attr("x", 0 + margin.left - 200)
+            .attr("y",0 + (height/height - 10))
+            //.attr("dy", "2em")
+            .style("text-anchor", "middle")
+            .text("Neighborhood");
+
+        // add the x Axis
+        svg.append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
+
+        // add the y Axis
+        svg.append("g")
+            .call(d3.axisLeft(y));
+
+        });
+      </script>
     </div>
+    <div class="caption">
+      <p>
+        The chart shows.....
+      </p>
+    </div>
+  </div>
   </section>
 
   <!-- footer -->
