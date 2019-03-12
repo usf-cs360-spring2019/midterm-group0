@@ -16,6 +16,9 @@
 
   <style>
 
+    .color {
+      background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
+    }
     .bar1 {
       fill: #F38B2F
     }
@@ -44,7 +47,7 @@
 <!-- body -->
 <body>
   <!-- header -->
-  <section class="hero is-dark is-bold">
+  <section class="hero color">
     <!-- todo: change assignment and name -->
     <div class="hero-body">
       <div class="container">
@@ -130,8 +133,9 @@
   <!-- about section -->
   <section class="section">
     <div class="container content">
-        <h4>Unit Types</h4>
-        <h3>Medical Incident Unity Types</h3>
+        <h2>Unit Types Dispatched to the Scene</h2>
+        </br>
+        <h5>Medical Incident Unit Types</h5>
         <div id="plot1">
           <script>
             d3.csv("unitMD.csv").then(function(data) {
@@ -214,7 +218,7 @@
 
   <section class="section">
   <div class="container content">
-    <h3>Traffic Collision Unit Types</h3>
+    <h5>Traffic Collision Unit Types</h5>
     <div id="plot2">
       <script>
         d3.csv("unitTC.csv").then(function(data) {

@@ -16,6 +16,10 @@
 
   <style>
 
+    .color {
+      background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
+    }
+
     .line {
      fill: none;
      stroke: none;
@@ -39,7 +43,7 @@
 <!-- body -->
 <body>
   <!-- header -->
-  <section class="hero is-dark is-bold">
+  <section class="hero color">
     <!-- todo: change assignment and name -->
     <div class="hero-body">
       <div class="container">
@@ -124,8 +128,9 @@
 
   <section class="section">
   <div class="container content">
-    <h4>Incidents Per Month</h4>
-    <h3>Monthly Medical Incidents</h3>
+    <h2>Incidents Per Month</h2>
+    </br>
+    <h5>Monthly Medical Incidents</h5>
     <div id="plot1">
       <script>
         d3.csv("monthMD.csv").then(function(data) {
@@ -222,7 +227,7 @@
 
 <section class="section">
 <div class="container content">
-  <h3>Monthly Traffic Collisions</h3>
+  <h5>Monthly Traffic Collisions</h5>
   <div id="plot2">
     <script>
         d3.csv("monthTC.csv").then(function(data) {

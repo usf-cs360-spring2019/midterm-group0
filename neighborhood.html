@@ -15,12 +15,8 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <style>
-
-    .bar1 {
-      fill: #F38B2F
-    }
-    .bar2 {
-      fill: #F38B2F
+    .color {
+      background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
     }
     .line {
      fill: none;
@@ -37,15 +33,15 @@
       font-size: 12px;
       margin-left: 20px;
     }
-  </style>
 
+  </style>
 
 </head>
 
 <!-- body -->
 <body>
   <!-- header -->
-  <section class="hero is-dark is-bold">
+  <section class="hero color">
     <!-- todo: change assignment and name -->
     <div class="hero-body">
       <div class="container">
@@ -130,8 +126,9 @@
 
   <section class="section">
   <div class="container content">
-    <h4>Neighborhood Incidents</h4>
-    <h3>Neighborhood Medical Incidents</h3>
+    <h2>Neighborhood Incidents</h2>
+    </br>
+    <h5>Neighborhood Medical Incidents</h5>
     <div id="plot1">
       <script>
         d3.csv("NeighborhoodsMD.csv").then(function(data) {
@@ -149,6 +146,9 @@
 
         var x = d3.scaleLinear()
                 .range([0, width]);
+
+       var color = d3.scaleSequential(d3.interpolateYlOrBr)
+	         .domain([0, d3.max(data, function(d){ return d.Count; })]);
 
         // append the svg object to the body of the page
         // append a 'group' element to 'svg'
@@ -175,6 +175,7 @@
             .attr("class", "bar1")
             .attr("width", function(d) {return x(d.Count); } )
             .attr("y", function(d) { return y(d.Neighborhood); })
+            .attr("fill", function(d){ return color(d.Count);})
             .attr("height", y.bandwidth());
 
         // add x axis label
@@ -214,7 +215,7 @@
 
   <section class="section">
   <div class="container content">
-    <h3>Neighborhood Traffic Collisions</h3>
+    <h5>Neighborhood Traffic Collisions</h5>
     <div id="plot2">
       <script>
         d3.csv("NeighborhoodsTC.csv").then(function(data) {
@@ -232,6 +233,9 @@
 
         var x = d3.scaleLinear()
                 .range([0, width]);
+
+        var color = d3.scaleSequential(d3.interpolateYlOrBr)
+ 	         .domain([0, d3.max(data, function(d){ return d.Count; })]);
 
         // append the svg object to the body of the page
         // append a 'group' element to 'svg'
@@ -258,6 +262,7 @@
             .attr("class", "bar2")
             .attr("width", function(d) {return x(d.Count); } )
             .attr("y", function(d) { return y(d.Neighborhood); })
+            .attr("fill", function(d){ return color(d.Count);})
             .attr("height", y.bandwidth());
 
         // add x axis label
