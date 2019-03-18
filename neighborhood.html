@@ -126,85 +126,144 @@
   </section>
 
 
+  <div id="main-navbar" class="navbar-menu">
+            <a class="navbar-item" href="incidents.html">
+              <span class="icon">
+                <i class="fas fa-chart-area"></i>
+              </span>
+              <span>Incidents by Call Type</span>
+            </a>
+          </div>
+
+          <div id="main-navbar" class="navbar-menu">
+            <a class="navbar-item" href="unit.html">
+              <span class="icon">
+                <i class="fas fa-chart-area"></i>
+              </span>
+              <span>Unit Type</span>
+            </a>
+          </div>
+
+          <div id="main-navbar" class="navbar-menu">
+            <a class="navbar-item" href="month.html">
+              <span class="icon">
+                <i class="fas fa-chart-area"></i>
+              </span>
+              <span>Month</span>
+            </a>
+          </div>
+
+          <div id="main-navbar" class="navbar-menu">
+            <a class="navbar-item" href="data.html">
+              <span class="icon">
+                <i class="fas fa-table"></i>
+              </span>
+              <span>Data</span>
+            </a>
+          </div>
+
+          <div id="main-navbar" class="navbar-menu">
+            <a class="navbar-item" href="prototypes.html">
+              <span class="icon">
+                <i class="fas fa-brush"></i>
+              </span>
+              <span>Prototypes</span>
+            </a>
+          </div>
+
+            <a class="navbar-item" href="team.html">
+              <span class="icon">
+                <i class="fas fa-info-circle"></i>
+              </span>
+              <span>About</span>
+            </a>
+          </div>
+
+        </nav>
+      </div>
+    </div>
+  </section>
+
+
   <section class="section">
   <div class="container content">
-    <h2>Neighborhood Incidents</h2>
+    <h2>Incidents by Call Type</h2>
     </br>
-    <h5>Neighborhood Medical Incidents</h5>
-    <div id="plot1">
+    <h5>Incidents in 2000</h5>
+    <div id="plot2000">
       <script>
-        d3.csv("NeighborhoodsMD.csv").then(function(data) {
-          console.log(data);
+          d3.csv("2000.csv").then(function(data) {
+            console.log(data);
 
-        // set the dimensions and margins of the graph
-        var margin = {top: 20, right: 20, bottom: 50, left: 145},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
+          // set the dimensions and margins of the graph
+          var margin = {top: 20, right: 20, bottom: 50, left: 145},
+            width = 960 - margin.left - margin.right,
+            height = 500 - margin.top - margin.bottom;
 
-        // set the ranges
-        var y = d3.scaleBand()
-                .range([height, 0])
-                .padding(0.1);
+          // set the ranges
+          var y = d3.scaleBand()
+                  .range([height, 0])
+                  .padding(0.1);
 
-        var x = d3.scaleLinear()
-                .range([0, width]);
+          var x = d3.scaleLinear()
+                  .range([0, width]);
 
-       var color = d3.scaleSequential(d3.interpolateYlOrBr)
-	         .domain([0, d3.max(data, function(d){ return d.Count; })]);
+          var color = d3.scaleSequential(d3.interpolateYlOrBr)
+             .domain([0, d3.max(data, function(d){ return d.count; })]);
 
-        // append the svg object to the body of the page
-        // append a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
-        var svg = d3.select("#plot1").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          // append the svg object to the body of the page
+          // append a 'group' element to 'svg'
+          // moves the 'group' element to the top left margin
+          var svg = d3.select("#plot2000").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // format the data
-        data.forEach(function(d) {
-          d.Count = +d.Count;
-        });
+          // format the data
+          data.forEach(function(d) {
+            d.count = +d.count;
+          });
 
-        // Scale the range of the data in the domains
-        x.domain([0, d3.max(data, function(d){ return d.Count; })])
-        y.domain(data.map(function(d) { return d.Neighborhood; }));
+          // Scale the range of the data in the domains
+          x.domain([0, d3.max(data, function(d){ return d.count; })])
+          y.domain(data.map(function(d) { return d.type; }));
 
-        // append the rectangles for the bar chart
-        svg.selectAll(".bar1")
-            .data(data)
-            .enter().append("rect")
-            .attr("class", "bar1")
-            .attr("width", function(d) {return x(d.Count); } )
-            .attr("y", function(d) { return y(d.Neighborhood); })
-            .attr("fill", function(d){ return color(d.Count);})
-            .attr("height", y.bandwidth());
+          // append the rectangles for the bar chart
+          svg.selectAll(".bar2")
+              .data(data)
+              .enter().append("rect")
+              .attr("class", "bar2")
+              .attr("width", function(d) {return x(d.count); } )
+              .attr("y", function(d) { return y(d.type); })
+              .attr("fill", function(d){ return color(d.count);})
+              .attr("height", y.bandwidth());
 
-        // add x axis label
-        svg.append("text")
-          .attr("x", width / 2 )
-          .attr("y",  height + margin.top + 20)
-          .style("text-anchor", "middle")
-          .text("Number of Records");
-
-          // add y axis label
+          // add x axis label
           svg.append("text")
-            .attr("x", 0 + margin.left - 200)
-            .attr("y",0 + (height/height - 10))
-            //.attr("dy", "2em")
+            .attr("x", width / 2 )
+            .attr("y",  height + margin.top + 20)
             .style("text-anchor", "middle")
-            .text("Neighborhood");
+            .text("Number of Records");
 
-        // add the x Axis
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
+            // add y axis label
+            svg.append("text")
+              .attr("x", 0 + margin.left - 200)
+              .attr("y",0 + (height/height - 10))
+              //.attr("dy", "2em")
+              .style("text-anchor", "middle")
+              .text("Call Type");
 
-        // add the y Axis
-        svg.append("g")
-            .call(d3.axisLeft(y));
+          // add the x Axis
+          svg.append("g")
+              .attr("transform", "translate(0," + height + ")")
+              .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
 
-        });
+          // add the y Axis
+          svg.append("g")
+              .call(d3.axisLeft(y));
+
+          });
       </script>
     </div>
     <div class="caption">
@@ -217,10 +276,10 @@
 
   <section class="section">
   <div class="container content">
-    <h5>Neighborhood Traffic Collisions</h5>
-    <div id="plot2">
+    <h5>Incidents in 2018</h5>
+    <div id="plot2018">
       <script>
-        d3.csv("NeighborhoodsTC.csv").then(function(data) {
+        d3.csv("2018.csv").then(function(data) {
           console.log(data);
 
         // set the dimensions and margins of the graph
@@ -237,12 +296,12 @@
                 .range([0, width]);
 
         var color = d3.scaleSequential(d3.interpolateYlOrBr)
- 	         .domain([0, d3.max(data, function(d){ return d.Count; })]);
+ 	         .domain([0, d3.max(data, function(d){ return d.count; })]);
 
         // append the svg object to the body of the page
         // append a 'group' element to 'svg'
         // moves the 'group' element to the top left margin
-        var svg = d3.select("#plot2").append("svg")
+        var svg = d3.select("#plot2018").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
@@ -250,21 +309,21 @@
 
         // format the data
         data.forEach(function(d) {
-          d.Count = +d.Count;
+          d.count = +d.count;
         });
 
         // Scale the range of the data in the domains
-        x.domain([0, d3.max(data, function(d){ return d.Count; })])
-        y.domain(data.map(function(d) { return d.Neighborhood; }));
+        x.domain([0, d3.max(data, function(d){ return d.count; })])
+        y.domain(data.map(function(d) { return d.type; }));
 
         // append the rectangles for the bar chart
         svg.selectAll(".bar2")
             .data(data)
             .enter().append("rect")
             .attr("class", "bar2")
-            .attr("width", function(d) {return x(d.Count); } )
-            .attr("y", function(d) { return y(d.Neighborhood); })
-            .attr("fill", function(d){ return color(d.Count);})
+            .attr("width", function(d) {return x(d.count); } )
+            .attr("y", function(d) { return y(d.type); })
+            .attr("fill", function(d){ return color(d.count);})
             .attr("height", y.bandwidth());
 
         // add x axis label
@@ -280,7 +339,7 @@
             .attr("y",0 + (height/height - 10))
             //.attr("dy", "2em")
             .style("text-anchor", "middle")
-            .text("Neighborhood");
+            .text("Call Type");
 
         // add the x Axis
         svg.append("g")
@@ -301,6 +360,28 @@
     </div>
   </div>
   </section>
+
+  <!-- footer -->
+  <footer class="footer">
+      <div class="content has-text-centered">
+        <small>
+          <a href="#top">
+            <span class="fas fa-arrow-up"></span>
+            <span>Back to Top</span>
+          </a>
+          <br/>
+          <a href="/">CS 360/560 Data Visualization</a>
+          &bullet;
+          <a href="https://myusf.usfca.edu/arts-sciences/computer-science">Department of Computer Science</a>
+          &bullet;
+          <a href="https://www.usfca.edu/">University of San Franciscio</a>
+        </small>
+      </div>
+    </footer>
+
+<!-- end body and html -->
+</body>
+</html>
 
   <!-- footer -->
   <footer class="footer">
