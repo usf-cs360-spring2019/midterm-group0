@@ -17,7 +17,7 @@
       background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
     }
   </style>
-  
+
 </head>
 
 <!-- body -->
@@ -53,7 +53,7 @@
               <span class="icon">
                 <i class="fas fa-chart-area"></i>
               </span>
-              <span>Neighborhood</span>
+              <span>2000/2018</span>
             </a>
           </div>
 
@@ -71,7 +71,7 @@
               <span class="icon">
                 <i class="fas fa-chart-area"></i>
               </span>
-              <span>Month</span>
+              <span>Fire Incidents</span>
             </a>
           </div>
 
@@ -113,41 +113,26 @@
       </h2>
             <p>
               The data used in these visualizations was taken from <a href="https://data.sfgov.org/Public-Safety/Fire-Department-Calls-for-Service/nuek-vuh3">SF Fire Department Calls for Service</a>.
-              The data was first filtered by year to only show data from 2017, the year with the most incidents reported.
-              The data was then filtered to include two specific incident types: medical incidents and traffic collisions.
-              Both categories were analyzed using the same variables in order to compare them more effectively.
-
+              The dataset excludes year 2019, in order to ensure our records are taken from full calendar years only.
 
               <p>
-              <br><u>Neighborhood Analysis</u> <br>
-              Our graph titled, "Neighborhood Medical Incidents" filtered the top 30 neighborhoods with the most incidents reported.
-              This narrowed down our data to include 30 categorical rows (each neighborhood) with a range from 0 to 486,862 number of records.
+              <br><u>Incidents in 2000 and 2018</u> <br>
+              These two graphs included all the incident call types in the years 2000 and 2018.
+              This gave us 21 categorical rows with a range from 0 to 100,863 and 0 to 213,945 number of records, respectively.
               </p>
 
               <p>
-              The same was done with our graph titled, "Neighborhood Traffic Collisions", but with a range from 0 to 20,515 number of records instead.
-              </p>
-
-
-              <p>
-              <br><u>Unit Type Analysis</u> <br>
-              Our next set of graphs involved filtering the top 9 unit types dispatched to the scene of the incident as well as adding color to distinguish if it was a non-life-threatening or life-threatening incident.
-              This added two more categorical rows to our data.
-              In our graph titled, "Medical Incident Unit Types" we included 9 categorical rows (each unit type) with a range from 0 to 217,822 number of records.
+              <br><u>Fire Incidents Per Year</u> <br>
+              The data used for this chart was filtered to only include incident call types that involved a fire, giving us 5 categorical rows of data to explore.
+              Again, we only included data from years 2000 to 2018 which resulted in the usage of 19 categorical columns. Color was added to distinguish the call type group the incident belonged.
+              The number of reported fire incidents ranged from 0 to 48,240 records.
               </p>
 
               <p>
-              The same was done for our next graph titled, "Traffic Collision Unit Types", with a range from 0 to 11,258 number of records instead.
-              </p>
-
-              <p>
-              <br><u>Monthly Report</u> <br>
-              Our last set of graphs was filtered by the month the incident was entred by the 911 dispatcher in 2017 to show the recorded number of incidences occuring in each.
-              Thus, our data used 12 categorical columns (each month) and our rows indicating the number of records.
-              </p>
-
-              <p>
-                The graphs in this set are titled, "Monthly Medical Incidents" with a range from 0 to 18,996 and our "Monthly Traffic Collisions" has a range from 0 to 1,322.
+              <br><u>Units Dispatched to Scene</u> <br>
+              This graph displays the various unit types dispatched to the scene for all incident types, therefore the number of columns included is 21.
+              The rows used were all unit types, for a total of 10 rows.
+              This graph was colored to highlight the incidents that involved fire and filtered to exclude year 2019.
               </p>
 
               <br/>
