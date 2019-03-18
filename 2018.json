@@ -1,0 +1,147 @@
+[
+  {
+    "area": "Administrative",
+    "value": 7,
+    "percent": 0
+  },
+  {
+    "area": "Train/Rail Fire",
+    "value": 13,
+    "percent": 0
+  },
+  {
+    "area": "Marine Fire",
+    "value": 15,
+    "percent": 0
+  },
+  {
+    "area": "High Angle Rescue",
+    "value": 25,
+    "percent": 0.01
+  },
+  {
+    "area": "Watercraft in Distress",
+    "value": 29,
+    "percent": 0.01
+  },
+  {
+    "area": "Suspicious Package",
+    "value": 29,
+    "percent": 0.01
+  },
+  {
+    "area": "Assist Polic",
+    "value": 36,
+    "percent": 0.01
+  },
+  {
+    "area": "Mutual Aid/Assist Outside Agency",
+    "value": 48,
+    "percent": 0.02
+  },
+  {
+    "area": "Confined Space/Structure Collapse",
+    "value": 48,
+    "percent": 0.02
+  },
+  {
+    "area": "Extrication/Entrapped",
+    "value": 49,
+    "percent": 0.02
+  },
+  {
+    "area": "Industrial Accidents",
+    "value": 65,
+    "percent": 0.02
+  },
+  {
+    "area": "Explosion",
+    "value": 67,
+    "percent": 0.02
+  },
+  {
+    "area": "Train/Rail Incident",
+    "value": 144,
+    "percent": 0.05
+  },
+  {
+    "area": "HazMat",
+    "value": 144,
+    "percent": 0.05
+  },
+  {
+    "area": "Odor",
+    "value": 233,
+    "percent": 0.07
+  },
+  {
+    "area": "Fuel Spill",
+    "value": 274,
+    "percent": 0.09
+  },
+  {
+    "area": "Smoke Investigation",
+    "value": 829,
+    "percent": 0.27
+  },
+  {
+    "area": "Elevator/Escalator Rescue",
+    "value": 931,
+    "percent": 0.3
+  },
+  {
+    "area": "Electrical Hazard",
+    "value": 986,
+    "percent": 0.32
+  },
+  {
+    "area": "Vehicle Fire",
+    "value": 1064,
+    "percent": 0.34
+  },
+  {
+    "area": "Water Rescure",
+    "value": 1497,
+    "percent": 0.48
+  },
+  {
+    "area": "Gas Leak",
+    "value": 1756,
+    "percent": 0.57
+  },
+  {
+    "area": "Citizen Assist/Service Call",
+    "value": 4139,
+    "percent": 1.33
+  },
+  {
+    "area": "Other",
+    "value": 4177,
+    "percent": 1.34
+  },
+  {
+    "area": "Outside Fire",
+    "value": 4607,
+    "percent": 1.48
+  },
+  {
+    "area": "Traffic Collision",
+    "value": 13366,
+    "percent": 4.3
+  },
+  {
+    "area": "Structure Fire",
+    "value": 26737,
+    "percent": 8.61
+  },
+  {
+    "area": "Alarms",
+    "value": 35440,
+    "percent": 11.41
+  },
+  {
+    "area": "Medical Incident",
+    "value": 213945,
+    "percent": 68.86
+  }
+]

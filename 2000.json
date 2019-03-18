@@ -1,0 +1,107 @@
+[
+  {
+    "area": "Suspicious Package",
+    "value": 25,
+    "percent": 0.02
+  },
+  {
+    "area": "Assist Police",
+    "value": 32,
+    "percent": 0.02
+  },
+  {
+    "area": "Aircraft Emergency",
+    "value": 50,
+    "percent": 0.03
+  },
+  {
+    "area": "Oil Spill",
+    "value": 67,
+    "percent": 0.04
+  },
+  {
+    "area": "Train/Rail Incident",
+    "value": 95,
+    "percent": 0.06
+  },
+  {
+    "area": "HazMat",
+    "value": 106,
+    "percent": 0.07
+  },
+  {
+    "area": "Industrial Accidents",
+    "value": 127,
+    "percent": 0.08
+  },
+  {
+    "area": "Electrical Hazard",
+    "value": 197,
+    "percent": 0.12
+  },
+  {
+    "area": "Water Rescue",
+    "value": 301,
+    "percent": 0.19
+  },
+  {
+    "area": "Fuel Spill",
+    "value": 316,
+    "percent": 0.2
+  },
+  {
+    "area": "Smoke Investigation",
+    "value": 366,
+    "percent": 0.23
+  },
+  {
+    "area": "Elevator/Escalator Rescue",
+    "value": 374,
+    "percent": 0.24
+  },
+  {
+    "area": "Gas Leak",
+    "value": 474,
+    "percent": 0.3
+  },
+  {
+    "area": "Odor",
+    "value": 562,
+    "percent": 0.36
+  },
+  {
+    "area": "Vehicle Fire",
+    "value": 860,
+    "percent": 0.54
+  },
+  {
+    "area": "Outside Fire",
+    "value": 2111,
+    "percent": 1.33
+  },
+  {
+    "area": "Other",
+    "value": 3186,
+    "percent": 2.01
+  },
+  {
+    "area": "Citizen Assist/Service Call",
+    "value": 3240,
+    "percent": 2.05
+  },
+  {
+    "area": "Alarms",
+    "value": 17139,
+    "percent": 10.84
+  },
+  {
+    "area": "Structure Fire",
+    "value": 27663,
+    "percent": 17.49
+  },
+  {
+    "area": "Medical Incident",
+    "value": 100863,
+    "percent": 63.78
+  }
+]
