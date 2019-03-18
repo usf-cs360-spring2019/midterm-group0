@@ -1,22 +1,1 @@
-"type,count,percent"
-"Medical Incident,100863,63.78"
-"Structure Fire,27663,17.49"
-"Alarms,17139,10.84"
-"Citizen Assist/Service Call,3240,2.05"
-"Other,3186,2.01"
-"Outside Fire,2111,1.33"
-"Vehicle Fire,860,0.54"
-"Odor,562,0.36"
-"Gas Leak,474,0.3"
-"Elevator/Escalator Rescue,374,0.24"
-"Smoke Investigation,366,0.23"
-"Fuel Spill,316,0.2"
-"Water Rescue,301,0.19"
-"Electrical Hazard,197,0.12"
-"Industrial Accidents,127,0.08"
-"HazMat,106,0.07"
-"Train/Rail Incident,95,0.06"
-"Oil Spill,67,0.04"
-"Aircraft Emergency,50,0.03"
-"Assist Police,32,0.02"
-"Suspicious Package,25,0.02"
+﻿type,count,percentSuspicious Package,25,0.02Assist Police,32,0.02Aircraft Emergency,50,0.03Oil Spill,67,0.04Train/Rail Incident,95,0.06HazMat,106,0.07Industrial Accidents,127,0.08Electrical Hazard,197,0.12Water Rescue,301,0.19Fuel Spill,316,0.2Smoke Investigation,366,0.23Elevator/Escalator Rescue,374,0.24Gas Leak,474,0.3Odor,562,0.36Vehicle Fire,860,0.54Outside Fire,2111,1.33Other,3186,2.01Citizen Assist/Service Call,3240,2.05Alarms,17139,10.84Structure Fire,27663,17.49Medical Incident,100863,63.78
