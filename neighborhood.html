@@ -179,7 +179,7 @@
             svg.append("text")
                 .attr("transform","translate(" + (width/2) + " ," + (height + margin.top+9) + ")")
                 .style("text-anchor", "middle")
-                .text("Number of Records");
+                .text("Number of Records(k)");
 
             svg.append("text")
                 .attr("transform", "rotate(-90)")
@@ -207,11 +207,6 @@
                 .on("mouseout", function(d){ tooltip.style("display", "none");});
         });
       </script>
-    </div>
-    <div class="caption">
-      <p>
-        The chart shows.....
-      </p>
     </div>
   </div>
   </section>
@@ -266,7 +261,7 @@
             svg.append("text")
               .attr("transform","translate(" + (width/2) + " ," + (height + margin.top+9) + ")")
               .style("text-anchor", "middle")
-              .text("Number of Records");
+              .text("Number of Records(k)");
 
             svg.selectAll(".bar")
                 .data(data)
@@ -284,14 +279,28 @@
                       .html("Total Percent: " + (d.percent)+"%");
                 })
                 .on("mouseout", function(d){ tooltip.style("display", "none");});
-
-
         });
       </script>
     </div>
     <div class="caption">
+      <h5>Interpretation</h5>
       <p>
-        The chart shows.....
+        The charts, "Incidents in 2000" and "Incidents in 2018" are comparing our oldest available full year of data in 2000 with our most current one in 2018. On our
+        y-axis we have our different call types and on our x-axis we have the Number of Records in thousands. We can
+        see the total number of records per year for each call type. The graph, "Incidents in 2000" ranges from 0 to 100,863 number of records while
+        the graph "Incidents in 2018" ranges from 0 to 213,945 number of records. When you hover over each category, a box pops up
+        with the call type's percentage of total call types.
+      </p>
+      <h5>Discussion</h5>
+      <p>
+
+      </p>
+      <h5>Credit</h5>
+      <p>
+        Inspiration from and credit to:
+        <br>
+          &bullet; Alan Dunning’s <a href="https://bl.ocks.org/alandunning/7008d0332cc28a826b37b3cf6e7bd998">Horizontal Bar Chart with Tooltip D3 V4</a>
+        <br>
       </p>
     </div>
   </div>
