@@ -20,21 +20,47 @@
     .color {
       background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
     }
-    .line {
-     fill: none;
-     stroke: none;
-    }
-    .area {
-     fill: #F38B2F;
-    }
-    .tick line {
-      stroke-width: 0;
-    }
-    .caption {
-      width: 960px;
-      font-size: 12px;
-      margin-left: 20px;
-    }
+    .label{
+			font-size: 15px;
+		}
+
+		.legend text,
+		.axis text {
+			font-size: 13px;
+			fill: #333;
+		}
+
+		.axis path,
+		.axis line{
+			fill: none;
+			stroke-width: 1px;
+			stroke: #777;
+		}
+
+		.circle{
+			fill-opacity: 0.65;
+		}
+
+		.bubble{
+			opacity: 1;
+			transition: opacity 0.3s;
+		}
+
+		.bubble:hover text{
+			opacity: 1;
+		}
+
+		.bubble:hover circle{
+			fill-opacity: 1;
+		}
+
+		.legend rect{
+			fill-opacity: 0.75;
+		}
+
+		.legend:hover rect{
+			fill-opacity:1;
+		}
   </style>
 
 
@@ -128,167 +154,150 @@
 
   <section class="section">
   <div class="container content">
-    <h2>Incidents Per Month</h2>
-    </br>
-    <h5>Monthly Medical Incidents</h5>
+    <h2>Yearly Fire Incidents</h2>
     <div id="plot1">
-      <script>
-        d3.csv("monthMD.csv").then(function(data) {
-            console.log(data);
-        // set the dimensions and margins of the graph
-        var margin = {top: 20, right: 20, bottom: 50, left: 50},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
-        // set the ranges
-        var x = d3.scaleBand()
-                .range([height*2, 0])
-                .padding(.6);
-        var y = d3.scaleLinear().range([height, 0]);
-        // define the area
-        var area = d3.area()
-            .x(function(d) { return x(d.Month); })
-            .y0(height)
-            .y1(function(d) { return y(d.Count); });
-        // define the line
-        var valueline = d3.line()
-            .x(function(d) { return x(d.Month); })
-            .y(function(d) { return y(d.Count); });
-        // append the svg obgect to the body of the page
-        // appends a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
-        var svg = d3.select("#plot1").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform","translate(" + margin.left + "," + margin.top + ")");
-          // format the data
-          data.forEach(function(d) {
-              d.Count = +d.Count;
-          });
-          // scale the range of the data
-          x.domain(data.map(function(d) { return d.Month; }));
-          y.domain([0, d3.max(data, function(d) { return d.Count; })]);
-          // add the area
-            svg.append("path")
-               .data([data])
-               .attr("class", "area")
-               .attr("d", area);
-          // add the valueline path.
-          svg.append("path")
-              .data([data])
-              .attr("class", "line")
-              .attr("d", valueline);
-          // add x axis label
-          svg.append("text")
-            .attr("x", width / 2 )
-            .attr("y",  height + margin.top + 15)
-            .style("text-anchor", "middle")
-            .text("Month 2017");
-          // add y axis label
-          svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
-            .attr("x",0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text("Number of Records");
-          // add the X Axis
-          svg.append("g")
-              .attr("transform", "translate(0," + height + ")")
-              .call(d3.axisBottom(x));
-          // add the Y Axis
-          svg.append("g")
-              .call(d3.axisLeft(y).tickFormat(d3.format(".1s")));
-        });
+      <script type="text/javascript">
+      var margin = {top: 50, right: 20, bottom: 30, left: 75},
+          width = 1200 - margin.left - margin.right,
+          height = 900 - margin.top - margin.bottom;
+
+      	var svg = d3.select('#plot1')
+      		.append('svg')
+      		.attr('width', width + margin.left + margin.right)
+      		.attr('height', height + margin.top + margin.bottom)
+      	.append('g')
+      		.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+
+      	var xScale = d3.scaleLinear()
+      		.range([0, width]);
+
+      	var yScale = d3.scaleLinear()
+      		.range([height, 0]);
+
+      	// square root scale.
+      	var radius = d3.scaleSqrt()
+      		.range([8,8]);
+
+      	var xAxis = d3.axisBottom()
+      		.scale(xScale)
+          .tickFormat(d3.format("d"));
+
+      	var yAxis = d3.axisLeft()
+      		.scale(yScale)
+          .tickFormat(d3.format(".0s"));
+
+      	var color = d3.scaleOrdinal()
+        							.range(["#9e3a26","#d75521", "#f38b2f", "#f6c760"]);
+
+      	d3.csv('callType.csv').then(function(data){
+
+      		data.forEach(function(d){
+      			 d.count= +d.count;
+      			 d.year = d.year;
+      			 d.group = d.group;
+      		});
+
+          xScale.domain(d3.extent(data, function(d){
+      			return d.year;
+      		})).nice();
+
+      		yScale.domain(d3.extent(data, function(d){
+      			return d.count;
+      		})).nice();
+
+      		radius.domain(d3.extent(data, function(d){
+      			return d.count;
+      		})).nice();
+
+      		// x-axis
+      		svg.append('g')
+      			.attr('transform', 'translate(0,' + height + ')')
+      			.attr('class', 'x axis')
+      			.call(xAxis);
+
+      		// y-axis
+      		svg.append('g')
+      			.attr('transform', 'translate(0,0)')
+      			.attr('class', 'y axis')
+      			.call(yAxis);
+
+
+      		var bubble = svg.selectAll('.bubble')
+      			.data(data)
+      			.enter().append('circle')
+      			.attr('class', 'bubble')
+      			.attr('cx', function(d){return xScale(d.year);})
+      			.attr('cy', function(d){ return yScale(d.count); })
+      			.attr('r', function(d){ return radius(d.count); })
+      			.style('fill', function(d){ return color(d.group); });
+
+      		bubble.append('title')
+      			.attr('x', function(d){ return radius(d.count); })
+      			.text(function(d){
+      				return d.group;
+      			});
+
+            // add y axis label
+            svg.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 0 - margin.left)
+              .attr("x",0 - (height / 2))
+              .attr("dy", "2em")
+              .style("text-anchor", "middle")
+              .text("Number of Records");
+
+      		var legend = svg.selectAll('legend')
+      			.data(color.domain())
+      			.enter().append('g')
+      			.attr('class', 'legend')
+      			.attr('transform', function(d,i){ return 'translate(0,' + i * 20 + ')'; });
+
+      		legend.append('rect')
+      			.attr('x', width)
+      			.attr('width', 18)
+      			.attr('height', 18)
+      			.style('fill', color);
+
+
+      		legend.append('text')
+      			.attr('x', width - 6)
+      			.attr('y', 9)
+      			.attr('dy', '.35em')
+      			.style('text-anchor', 'end')
+      			.text(function(d){ return d; });
+
+
+      		// d3 has a filter
+      		legend.on('click', function(type){
+
+            d3.selectAll('.bubble')
+      				.style('opacity', 0.15)
+      				.filter(function(d){
+      					return d.group == type;
+      				})
+      				.style('opacity', 1);
+      		})
+
+      	})
+
       </script>
     </div>
-    <div class="caption">
+  </br>
+    <h5>Interpretation</h5>
       <p>
         The plot shows...
       </p>
-    </div>
-</div>
-</section>
 
-<section class="section">
-<div class="container content">
-  <h5>Monthly Traffic Collisions</h5>
-  <div id="plot2">
-    <script>
-        d3.csv("monthTC.csv").then(function(data) {
-            console.log(data);
-        // set the dimensions and margins of the graph
-        var margin = {top: 20, right: 20, bottom: 50, left: 50},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
-        // set the ranges
-        var x = d3.scaleBand()
-                .range([height*2, 0])
-                .padding(.6);
-        var y = d3.scaleLinear().range([height, 0]);
-        // define the area
-        var area = d3.area()
-            .x(function(d) { return x(d.Month); })
-            .y0(height)
-            .y1(function(d) { return y(d.Count); });
-        // define the line
-        var valueline = d3.line()
-            .x(function(d) { return x(d.Month); })
-            .y(function(d) { return y(d.Count); });
-        // append the svg obgect to the body of the page
-        // appends a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
-        var svg = d3.select("#plot2").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform","translate(" + margin.left + "," + margin.top + ")");
-          // format the data
-          data.forEach(function(d) {
-              d.Count = +d.Count;
-          });
-          // scale the range of the data
-          x.domain(data.map(function(d) { return d.Month; }));
-          y.domain([0, d3.max(data, function(d) { return d.Count; })]);
-          // add the area
-            svg.append("path")
-               .data([data])
-               .attr("class", "area")
-               .attr("d", area);
-          // add the valueline path.
-          svg.append("path")
-              .data([data])
-              .attr("class", "line")
-              .attr("d", valueline);
-          // add x axis label
-          svg.append("text")
-            .attr("x", width / 2 )
-            .attr("y",  height + margin.top + 15)
-            .style("text-anchor", "middle")
-            .text("Month 2017");
-          // add y axis label
-          svg.append("text")
-            .attr("transform", "rotate(-90)")
-            .attr("y", 0 - margin.left)
-            .attr("x",0 - (height / 2))
-            .attr("dy", "1em")
-            .style("text-anchor", "middle")
-            .text("Number of Records");
-          // add the X Axis
-          svg.append("g")
-              .attr("transform", "translate(0," + height + ")")
-              .call(d3.axisBottom(x));
-          // add the Y Axis
-          svg.append("g")
-              .call(d3.axisLeft(y).tickFormat(d3.format(".2s")));
-        });
-    </script>
-  </div>
-  <div class="caption">
-    <p>
-      The plot shows...
-    </p>
-  </div>
+      <h5>Discussion</h5>
+      <p>
+        Discuss
+      </p>
+
+      <h5>Credit</h5>
+      <p>
+        This interactive scatterplot was inspired by Jverma's<a href="https://blockbuilder.org/Jverma/076377dd0125b1a508621441752735fc"> Scatterplot of Iris data : d3 v4</a>.
+      </p>
 </div>
 </section>
 

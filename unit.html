@@ -20,27 +20,28 @@
     .color {
       background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
     }
-    .bar1 {
-      fill: #F38B2F
-    }
-    .bar2 {
-      fill: #F38B2F
-    }
-    .line {
-     fill: none;
-     stroke: none;
-    }
-    .area {
-     fill: lightsteelblue;
-    }
-    .tick line {
-      stroke-width: 0;
-    }
-    .caption {
+    #main {
       width: 960px;
-      font-size: 12px;
-      margin-left: 20px;
     }
+    .axis .domain {
+      display: none;
+    }
+    .bullet {
+        display: inline-block;
+        height: 10px;
+        margin-right: .5em;
+        width: 10px;
+    }
+
+    .legend1 {
+        display: inline-block;
+    }
+    .legend {
+        float: right;
+    }
+    .one { background: #f7a84a;}
+    .two { background: #c8c3c6;}
+
   </style>
 
 </head>
@@ -134,171 +135,138 @@
   <!-- about section -->
   <section class="section">
     <div class="container content">
-        <h2>Unit Types Dispatched to the Scene</h2>
-        </br>
-        <h5>Medical Incident Unit Types</h5>
-        <div id="plot1">
+      <h2>Unit Dispatched to Scene</h2>
+      <br>
+
+      <div class="legend">
+        <h6>Call Type</h6>
+        <div class="legend1"><span class="bullet one"></span>Fire Incidents</p> </div>
+        <br>
+        <div class="legend1"><span class="bullet two"></span>Non-Fire Incidents</p> </div>
+      </div>
+
+          <div id="main">
+          <svg width="1440" height="900"></svg>
+
           <script>
-            d3.csv("unitMD.csv").then(function(data) {
-              console.log(data);
+          // create the svg
+          var svg = d3.select("svg"),
+              margin = {top: 50, right: 20, bottom: 30, left: 75},
+              width = +svg.attr("width") - margin.left - margin.right,
+              height = +svg.attr("height") - margin.top - margin.bottom,
+              g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            // set the dimensions and margins of the graph
-            var margin = {top: 20, right: 20, bottom: 50, left: 145},
-              width = 960 - margin.left - margin.right,
-              height = 500 - margin.top - margin.bottom;
+          // set x scale
+          var x = d3.scaleBand()
+              .rangeRound([0, width])
+              .paddingInner(0.05)
+              .align(0.1);
 
-            // set the ranges
-            var y = d3.scaleBand()
-                    .range([height, 0])
-                    .padding(0.1);
+          // set y scale
+          var y = d3.scaleLinear()
+              .rangeRound([height, 0]);
 
-            var x = d3.scaleLinear()
-                    .range([0, width]);
+          // set the colors
+          var z = d3.scaleOrdinal()
+              .range(["#f7a84a","#c8c3c6"]);
 
-            // append the svg object to the body of the page
-            // append a 'group' element to 'svg'
-            // moves the 'group' element to the top left margin
-            var svg = d3.select("#plot1").append("svg")
-              .attr("width", width + margin.left + margin.right)
-              .attr("height", height + margin.top + margin.bottom)
-              .append("g")
-              .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+          // load the csv and create the chart
+          d3.csv("unitType.csv", function(d, i, columns) {
+            for (i = 1, t = 0; i < columns.length; ++i) t += d[columns[i]] = +d[columns[i]];
+            d.total = t;
+            return d;
+          }).then(function(data){
 
-            // format the data
-            data.forEach(function(d) {
-              d.Count = +d.Count;
-            });
+            var keys = data.columns.slice(1);
 
-            // Scale the range of the data in the domains
-            x.domain([0, d3.max(data, function(d){ return d.Count; })])
-            y.domain(data.map(function(d) { return d.Unit; }));
+            data.sort(function(a, b) { return b.total - a.total; });
+            x.domain(data.map(function(d) { return d.Unit; }));
+            y.domain([0, d3.max(data, function(d) { return d.total; })]);
+            z.domain(keys);
 
-            // append the rectangles for the bar chart
-            svg.selectAll(".bar1")
-                .data(data)
-                .enter().append("rect")
-                .attr("class", "bar1")
-                .attr("width", function(d) {return x(d.Count); } )
-                .attr("y", function(d) { return y(d.Unit); })
-                .attr("height", y.bandwidth());
+            g.append("g")
+              .selectAll("g")
+              .data(d3.stack().keys(keys)(data))
+              .enter().append("g")
+                .attr("fill", function(d) { return z(d.key); })
+              .selectAll("rect")
+              .data(function(d) { return d; })
+              .enter().append("rect")
+                .attr("x", function(d) { return x(d.data.Unit); })
+                .attr("y", function(d) { return y(d[1]); })
+                .attr("height", function(d) { return y(d[0]) - y(d[1]); })
+                .attr("width", x.bandwidth())
+              .on("mouseover", function() { tooltip.style("display", null); })
+              .on("mouseout", function() { tooltip.style("display", "none"); })
+              .on("mousemove", function(d) {
+                console.log(d);
+                var xPosition = d3.mouse(this)[0] - 5;
+                var yPosition = d3.mouse(this)[1] - 5;
+                tooltip.attr("transform", "translate(" + xPosition + "," + yPosition + ")");
+                tooltip.select("text").text("Count: " + (d[1]-d[0]));
+              });
+
+            g.append("g")
+                .attr("class", "axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
+
+            g.append("g")
+                .attr("transform", "translate(" + x(1) + ",0)")
+              .attr("class", "axis")
+              .call(d3.axisLeft(y)
+                  .ticks(15)
+                  .tickFormat(d3.format(".0s")));
 
             // add x axis label
-            svg.append("text")
+            g.append("text")
               .attr("x", width / 2 )
-              .attr("y",  height + margin.top + 20)
+              .attr("y",  height + margin.top - 490)
+              .style("text-anchor", "middle")
+              .text("Unit Type");
+
+            // add y axis label
+            g.append("text")
+              .attr("transform", "rotate(-90)")
+              .attr("y", 0 - margin.left)
+              .attr("x",0 - (height / 2))
+              .attr("dy", "2em")
               .style("text-anchor", "middle")
               .text("Number of Records");
+          });
 
-              // add y axis label
-              svg.append("text")
-                .attr("x", 0 + margin.left - 200)
-                .attr("y",0 + (height/height - 10))
-                //.attr("dy", "2em")
-                .style("text-anchor", "middle")
-                .text("Unit Type");
+            // Prep the tooltip bits, initial display is hidden
+            var tooltip = svg.append("g")
+              .attr("class", "tooltip")
+              .style("display", "none");
 
-            // add the x Axis
-            svg.append("g")
-                .attr("transform", "translate(0," + height + ")")
-                .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
+            tooltip.append("text")
+              .attr("x", 30)
+              .attr("dy", "1.2em")
+              .style("text-anchor", "middle")
+              .attr("font-size", "12px")
+              .attr("font-weight", "bold");
 
-            // add the y Axis
-            svg.append("g")
-                .call(d3.axisLeft(y));
-
-            });
           </script>
         </div>
-        <div class="caption">
-          <p>
-            The chart shows.....
-          </p>
-        </div>
-      </div>
-  </section>
-
-  <section class="section">
-  <div class="container content">
-    <h5>Traffic Collision Unit Types</h5>
-    <div id="plot2">
-      <script>
-        d3.csv("unitTC.csv").then(function(data) {
-          console.log(data);
-
-        // set the dimensions and margins of the graph
-        var margin = {top: 20, right: 20, bottom: 50, left: 145},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
-
-        // set the ranges
-        var y = d3.scaleBand()
-                .range([height, 0])
-                .padding(0.1);
-
-        var x = d3.scaleLinear()
-                .range([0, width]);
-
-        // append the svg object to the body of the page
-        // append a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
-        var svg = d3.select("#plot2").append("svg")
-          .attr("width", width + margin.left + margin.right)
-          .attr("height", height + margin.top + margin.bottom)
-          .append("g")
-          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-        // format the data
-        data.forEach(function(d) {
-          d.Count = +d.Count;
-        });
-
-        // Scale the range of the data in the domains
-        x.domain([0, d3.max(data, function(d){ return d.Count; })])
-        y.domain(data.map(function(d) { return d.Unit; }));
-
-        // append the rectangles for the bar chart
-        svg.selectAll(".bar2")
-            .data(data)
-            .enter().append("rect")
-            .attr("class", "bar2")
-            .attr("width", function(d) {return x(d.Count); } )
-            .attr("y", function(d) { return y(d.Unit); })
-            .attr("height", y.bandwidth());
-
-        // add x axis label
-        svg.append("text")
-          .attr("x", width / 2 )
-          .attr("y",  height + margin.top + 20)
-          .style("text-anchor", "middle")
-          .text("Number of Records");
-
-          // add y axis label
-          svg.append("text")
-            .attr("x", 0 + margin.left - 200)
-            .attr("y",0 + (height/height - 10))
-            //.attr("dy", "2em")
-            .style("text-anchor", "middle")
-            .text("Unity Type");
-
-        // add the x Axis
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
-
-        // add the y Axis
-        svg.append("g")
-            .call(d3.axisLeft(y));
-
-        });
-      </script>
-    </div>
-    <div class="caption">
+      </br>
+      <h5>Interpretation</h5>
       <p>
-        The chart shows.....
+        The chart shows the Unit Types dispatched to each Call Type incident.
+        The Call Types were categorized by incidents involving fire (Marine Fire, Outside Fire, Structure Fire, Train / Rail Fire, Vehicle Fire)
+        and incidents not involving fire (the remaining Call Types).
       </p>
-    </div>
-  </div>
-  </section>
+
+      <h5>Discussion</h5>
+      <p>
+        The number of units dispatched to the scene invovling fire is overall significantly less than units dispatched to scenes not involving fire.
+      </p>
+      <h5>Credit</h5>
+
+      <p>
+         This interactive bar chart was inspired by Mike Foster's<a href="https://bl.ocks.org/mjfoster83/7c9bdfd714ab2f2e39dd5c09057a55a0"> D3js v4 Stacked Bar Chart - with Tooltip Hover</a>.
+      </p>
+    </section>
 
   <!-- footer -->
   <footer class="footer">

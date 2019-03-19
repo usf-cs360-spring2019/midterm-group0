@@ -1,21 +1,11 @@
-﻿unit,type,count
-airport,fire,68
-airport,other,19276
-chief,fire,127533
-chief,other,229194
-engine,fire,290701
-engine,other,1573395
-investigation,fire,4279
-investigation,other,888
-Medic,fire,40390
-Medic,other,1458996
-Private,fire,1726
-Private,other,298981
-Rescue Captain,fire,5523
-Rescue Captain,other,160420
-Rescue Squad,fire,35748
-Rescue Squad,other,52452
-Support,fire,7010
-Support,other,16408
-Truck,fire,198468
-Truck,other,325168
+Unit,Fire,Other
+Airport,68,19276
+Chief,127533,229194
+Engine,290701,1573395
+Investigation,4279,888
+Medic,40390,1458996
+Private,1726,298981
+Rescue Captain,5523,160420
+Rescue Squad,35748,52452
+Support,7010,16408
+Truck,198468,325168
