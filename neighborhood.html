@@ -20,20 +20,29 @@
     .color {
       background-image: linear-gradient(to bottom right, #CB4335, #F5B041);
     }
-    .line {
-     fill: none;
-     stroke: none;
+
+    .bar {
+    	fill: #db5920;
     }
-    .area {
-     fill: lightsteelblue;
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #D4D8DA;
+      stroke-width: 1px;
+      shape-rendering: crispEdges;
     }
-    .tick line {
-      stroke-width: 0;
+    .x path {
+    	display: none;
     }
-    .caption {
-      width: 960px;
-      font-size: 12px;
-      margin-left: 20px;
+    .toolTip {
+    	position: absolute;
+      display: none;
+      min-width: 80px;
+      height: auto;
+      background: none repeat scroll 0 0 #ffffff;
+      border: 1px solid #db5920;
+      padding: 14px;
+      text-align: center;
     }
 
   </style>
@@ -130,81 +139,73 @@
   <div class="container content">
     <h2>Incidents by Call Type</h2>
     </br>
-    <h5>Incidents in 2000</h5>
+    <center> <h5>Incidents in 2000</h5> </center>
     <div id="plot2000">
       <script>
-          d3.csv("2000.csv").then(function(data) {
-            console.log(data);
 
-          // set the dimensions and margins of the graph
-          var margin = {top: 20, right: 20, bottom: 50, left: 145},
-            width = 960 - margin.left - margin.right,
-            height = 500 - margin.top - margin.bottom;
+      d3.json("2000.json").then(function(data) {
+        console.log(data)
 
-          // set the ranges
-          var y = d3.scaleBand()
-                  .range([height, 0])
-                  .padding(0.1);
+        var margin = {top: 20, right: 20, bottom: 30, left: 145},
+        width = 960 - margin.left - margin.right,
+        height = 900 - margin.top - margin.bottom;
 
-          var x = d3.scaleLinear()
-                  .range([0, width]);
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
-          var color = d3.scaleSequential(d3.interpolateYlOrBr)
-             .domain([0, d3.max(data, function(d){ return d.count; })]);
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleBand().range([height, 0]);
 
-          // append the svg object to the body of the page
-          // append a 'group' element to 'svg'
-          // moves the 'group' element to the top left margin
-          var svg = d3.select("#plot2000").append("svg")
-            .attr("width", width + margin.left + margin.right)
-            .attr("height", height + margin.top + margin.bottom)
-            .append("g")
-            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        var svg = d3.select("#plot2000").append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-          // format the data
-          data.forEach(function(d) {
-            d.count = +d.count;
-          });
 
-          // Scale the range of the data in the domains
-          x.domain([0, d3.max(data, function(d){ return d.count; })])
-          y.domain(data.map(function(d) { return d.type; }));
+            data.sort(function(a, b) { return a.value - b.value; });
 
-          // append the rectangles for the bar chart
-          svg.selectAll(".bar2")
-              .data(data)
-              .enter().append("rect")
-              .attr("class", "bar2")
-              .attr("width", function(d) {return x(d.count); } )
-              .attr("y", function(d) { return y(d.type); })
-              .attr("fill", function(d){ return color(d.count);})
-              .attr("height", y.bandwidth());
+            x.domain([0, d3.max(data, function(d) { return d.value; })]);
+            y.domain(data.map(function(d) { return d.area; })).padding(0.1);
 
-          // add x axis label
-          svg.append("text")
-            .attr("x", width / 2 )
-            .attr("y",  height + margin.top + 20)
-            .style("text-anchor", "middle")
-            .text("Number of Records");
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d / 1000); }).tickSizeInner([-height]));
 
-            // add y axis label
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(d3.axisLeft(y));
+
             svg.append("text")
-              .attr("x", 0 + margin.left - 200)
-              .attr("y",0 + (height/height - 10))
-              //.attr("dy", "2em")
-              .style("text-anchor", "middle")
-              .text("Call Type");
+                .attr("transform","translate(" + (width/2) + " ," + (height + margin.top+9) + ")")
+                .style("text-anchor", "middle")
+                .text("Number of Records");
 
-          // add the x Axis
-          svg.append("g")
-              .attr("transform", "translate(0," + height + ")")
-              .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left - 5)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Call Types");
 
-          // add the y Axis
-          svg.append("g")
-              .call(d3.axisLeft(y));
-
-          });
+            svg.selectAll(".bar")
+                .data(data)
+              .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", 0)
+                .attr("height", y.bandwidth())
+                .attr("y", function(d) { return y(d.area); })
+                .attr("width", function(d) { return x(d.value); })
+                .on("mousemove", function(d){
+                    tooltip
+                      .style("left", d3.event.pageX - 50 + "px")
+                      .style("top", d3.event.pageY - 70 + "px")
+                      .style("display", "inline-block")
+                      .html("Total Percent: " + (d.percent)+"%");
+                })
+                .on("mouseout", function(d){ tooltip.style("display", "none");});
+        });
       </script>
     </div>
     <div class="caption">
@@ -217,79 +218,73 @@
 
   <section class="section">
   <div class="container content">
-    <h5>Incidents in 2018</h5>
+    <center> <h5>Incidents in 2018</h5> </center>
     <div id="plot2018">
       <script>
-        d3.csv("2018.csv").then(function(data) {
-          console.log(data);
 
-        // set the dimensions and margins of the graph
-        var margin = {top: 20, right: 20, bottom: 50, left: 145},
-          width = 960 - margin.left - margin.right,
-          height = 500 - margin.top - margin.bottom;
+      d3.json("2018.json").then(function(data) {
+        console.log(data)
 
-        // set the ranges
-        var y = d3.scaleBand()
-                .range([height, 0])
-                .padding(0.1);
+        var margin = {top: 20, right: 20, bottom: 30, left: 145},
+        width = 960 - margin.left - margin.right,
+        height = 900 - margin.top - margin.bottom;
 
-        var x = d3.scaleLinear()
-                .range([0, width]);
+        var tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
-        var color = d3.scaleSequential(d3.interpolateYlOrBr)
- 	         .domain([0, d3.max(data, function(d){ return d.count; })]);
+        var x = d3.scaleLinear().range([0, width]);
+        var y = d3.scaleBand().range([height, 0]);
 
-        // append the svg object to the body of the page
-        // append a 'group' element to 'svg'
-        // moves the 'group' element to the top left margin
         var svg = d3.select("#plot2018").append("svg")
           .attr("width", width + margin.left + margin.right)
           .attr("height", height + margin.top + margin.bottom)
           .append("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-        // format the data
-        data.forEach(function(d) {
-          d.count = +d.count;
-        });
 
-        // Scale the range of the data in the domains
-        x.domain([0, d3.max(data, function(d){ return d.count; })])
-        y.domain(data.map(function(d) { return d.type; }));
+            data.sort(function(a, b) { return a.value - b.value; });
 
-        // append the rectangles for the bar chart
-        svg.selectAll(".bar2")
-            .data(data)
-            .enter().append("rect")
-            .attr("class", "bar2")
-            .attr("width", function(d) {return x(d.count); } )
-            .attr("y", function(d) { return y(d.type); })
-            .attr("fill", function(d){ return color(d.count);})
-            .attr("height", y.bandwidth());
+            x.domain([0, d3.max(data, function(d) { return d.value; })]);
+            y.domain(data.map(function(d) { return d.area; })).padding(0.1);
 
-        // add x axis label
-        svg.append("text")
-          .attr("x", width / 2 )
-          .attr("y",  height + margin.top + 20)
-          .style("text-anchor", "middle")
-          .text("Number of Records");
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x).ticks(5).tickFormat(function(d) { return parseInt(d / 1000); }).tickSizeInner([-height]));
 
-          // add y axis label
-          svg.append("text")
-            .attr("x", 0 + margin.left - 200)
-            .attr("y",0 + (height/height - 10))
-            //.attr("dy", "2em")
-            .style("text-anchor", "middle")
-            .text("Call Type");
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(d3.axisLeft(y));
 
-        // add the x Axis
-        svg.append("g")
-            .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x).tickFormat(d3.format(".2s")));
+            svg.append("text")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - margin.left - 5)
+                .attr("x",0 - (height / 2))
+                .attr("dy", "1em")
+                .style("text-anchor", "middle")
+                .text("Call Types");
 
-        // add the y Axis
-        svg.append("g")
-            .call(d3.axisLeft(y));
+            svg.append("text")
+              .attr("transform","translate(" + (width/2) + " ," + (height + margin.top+9) + ")")
+              .style("text-anchor", "middle")
+              .text("Number of Records");
+
+            svg.selectAll(".bar")
+                .data(data)
+              .enter().append("rect")
+                .attr("class", "bar")
+                .attr("x", 0)
+                .attr("height", y.bandwidth())
+                .attr("y", function(d) { return y(d.area); })
+                .attr("width", function(d) { return x(d.value); })
+                .on("mousemove", function(d){
+                    tooltip
+                      .style("left", d3.event.pageX - 50 + "px")
+                      .style("top", d3.event.pageY - 70 + "px")
+                      .style("display", "inline-block")
+                      .html("Total Percent: " + (d.percent)+"%");
+                })
+                .on("mouseout", function(d){ tooltip.style("display", "none");});
+
 
         });
       </script>
@@ -301,28 +296,6 @@
     </div>
   </div>
   </section>
-
-  <!-- footer -->
-  <footer class="footer">
-      <div class="content has-text-centered">
-        <small>
-          <a href="#top">
-            <span class="fas fa-arrow-up"></span>
-            <span>Back to Top</span>
-          </a>
-          <br/>
-          <a href="/">CS 360/560 Data Visualization</a>
-          &bullet;
-          <a href="https://myusf.usfca.edu/arts-sciences/computer-science">Department of Computer Science</a>
-          &bullet;
-          <a href="https://www.usfca.edu/">University of San Franciscio</a>
-        </small>
-      </div>
-    </footer>
-
-<!-- end body and html -->
-</body>
-</html>
 
   <!-- footer -->
   <footer class="footer">
